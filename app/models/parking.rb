@@ -5,6 +5,8 @@ class Parking < ApplicationRecord
   validates_inclusion_of :parking_type, :in => ["guest", "short-term", "long-term"]
   # 强制结束时间和金额一起填写
   validate :validate_end_at_with_amount
+  # 与user产生关联关系
+  belongs_to :user, :optional => true
 
 # 限制金额和结束时间的输出
   def validate_end_at_with_amount
