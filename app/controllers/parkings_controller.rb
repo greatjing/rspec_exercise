@@ -4,7 +4,19 @@ class ParkingsController < ApplicationController
   end
 
   def create
-    @parking = Parking.new( :parking_type => "guest", :start_at => Time.now )
+    # 只针对一般客户
+    # @parking = Parking.new( :parking_type => "guest", :start_at => Time.now )
+
+    # 下面针对所有数客户，登入用户按照选择计算，一般用户按照一般用户计费
+    @parking = Parking.new( :start_at => Time.now )
+
+    if current_user
+      @parking.parking_type = params[:parking][:parking_type]
+      @parking.user = current_user
+    else
+      @parking.parking_type = "guest"
+    end
+
     @parking.save!
 
     redirect_to parking_path(@parking)
