@@ -156,7 +156,7 @@ RSpec.describe Parking, type: :model do
     end
 
     # 长期费率
-    context "short-term" do
+    context "long-term" do
       before do
         @user = User.new(:email => "test@examples.com", :password => "123456")
         @parking = Parking.new(:parking_type => "long-term", :user => @user, :start_at => @time)
@@ -179,6 +179,18 @@ RSpec.describe Parking, type: :model do
         @parking.end_at = @time + 1440.minutes
         @parking.calculate_amount
         expect(@parking.amount).to eq(1600)
+      end
+
+      it " 24 hours and 1 minutes should be 32¥ " do
+        @parking.end_at = @time + 1441.minutes
+        @parking.calculate_amount
+        expect(@parking.amount).to eq(3200)
+      end
+
+      it " 24+24 hours should be 16¥ " do
+        @parking.end_at = @time + 2880.minutes
+        @parking.calculate_amount
+        expect(@parking.amount).to eq(3200)
       end
 
     end

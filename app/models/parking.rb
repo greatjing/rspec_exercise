@@ -68,13 +68,18 @@ class Parking < ApplicationRecord
   end
 
   def calculate_long_term_amount
+    puts duration.to_i / 1440
     if duration < 360
       # 打印信息
       # puts "______"
       self.amount = 1200
     else
       # puts "******"
-      self.amount = 1600
+      if duration.to_i % 1440 == 0
+        self.amount = (duration.to_i / 1440) * 1600
+      else
+        self.amount = ((duration.to_i / 1440) + 1) * 1600
+      end
     end
   end
 
