@@ -155,6 +155,34 @@ RSpec.describe Parking, type: :model do
 
     end
 
+    # 长期费率
+    context "short-term" do
+      before do
+        @user = User.new(:email => "test@examples.com", :password => "123456")
+        @parking = Parking.new(:parking_type => "long-term", :user => @user, :start_at => @time)
+      end
+
+      # 可添加:focus => true只执行一个case
+      it "1 hour should be 12¥"  do
+        @parking.end_at = @time + 60.minutes
+        @parking.calculate_amount
+        expect(@parking.amount).to eq(1200)
+      end
+
+      it "6 hours should be 16¥" do
+        @parking.end_at = @time + 360.minutes
+        @parking.calculate_amount
+        expect(@parking.amount).to eq(1600)
+      end
+
+      it " 24 hours should be 16¥ " do
+        @parking.end_at = @time + 1440.minutes
+        @parking.calculate_amount
+        expect(@parking.amount).to eq(1600)
+      end
+
+    end
+
   end
 
 end

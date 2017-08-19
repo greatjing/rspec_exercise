@@ -23,23 +23,58 @@ class Parking < ApplicationRecord
   end
 
   def calculate_amount
-    factor = (self.user.present?)? 50 : 100
+    # factor = (self.user.present?)? 50 : 100
 
     if self.amount.blank? && self.start_at.present? && self.end_at.present?
+      if self.user.blank?
+        self.amount = calculate_guest_term_amount
+      elsif self.parking_type == "short-term"
+        self.amount = calculate_short_term_amount
+      elsif self.parking_type == "long-term"
+        self.amount = calculate_long_term_amount
+      end
+
       #self.amount = 1111
       # if duration <= 60
       #   self.amount = 200
       # end
       # total = 0
-      if duration <= 60
-        self.amount = 200
-      else
-        self.amount = 200 + ((duration - 60).to_f / 30).ceil * factor
-        # total += 200
-        # left_duration = duration - 60
-        # total += ( left_duration.to_f / 30 ).ceil * 100
-      end
+      # if duration <= 60
+      #   self.amount = 200
+      # else
+      #   self.amount = 200 + ((duration - 60).to_f / 30).ceil * factor
+      #   # total += 200
+      #   # left_duration = duration - 60
+      #   # total += ( left_duration.to_f / 30 ).ceil * 100
+      # end
       # self.amount = total
+    end
+  end
+
+  def calculate_guest_term_amount
+    if duration <= 60
+      self.amount = 200
+    else
+      self.amount = 200 + ((duration - 60).to_f / 30 ).ceil * 100
+    end
+  end
+
+  def calculate_short_term_amount
+    if duration <= 60
+      self.amount = 200
+    else
+      self.amount = 200 + ((duration - 60).to_f / 30 ).ceil * 50
+    end
+  end
+
+  def calculate_long_term_amount
+    if duration < 360
+      # 打印信息
+      # puts "______"
+      self.amount = 1200
+    else
+      # puts "******"
+      self.amount = 1600
     end
   end
 
