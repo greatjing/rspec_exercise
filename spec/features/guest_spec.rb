@@ -4,6 +4,10 @@ feature "parking", :type => :feature do
   scenario "guest parking" do
     # step 1 打开首页
     visit "/"
+
+    # 存下测试当时html页面供后续排查
+    # save_and_open_page
+
     # 检查打开html页面
     expect(page).to have_content("一般计费")
 
