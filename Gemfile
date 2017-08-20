@@ -44,7 +44,10 @@ group :development, :test do
 end
 
 group :development do
+  # 单元测试
   gem 'rspec-rails'
+  # 用户验收测试
+  gem 'capybara'
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.0.5'
