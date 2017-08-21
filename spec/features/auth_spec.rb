@@ -25,4 +25,29 @@ feature "register and login", :type => :feature do
 
   end
 
+  scenario "login and logout" do
+    # 插入一条用户数据
+    user = User.create!( :email => "login@test.cn", :password => "12345678" )
+
+    # step1 打开登录页面
+    visit "/users/sign_in"
+
+    # step2 输入账号和密码
+    within("#new_user") do
+      fill_in "Email", with: "login@test.cn"
+      fill_in "Password", with: "12345678"
+    end
+
+    save_and_open_page
+
+    # step3 点击登录按钮
+    click_button "Log in"
+    expect(page).to have_content("Signed in successfully")
+
+    # step4 点击登出按钮
+    click_link "登出"
+    expect(page).to have_content("Signed out successfully")
+
+  end
+
 end
