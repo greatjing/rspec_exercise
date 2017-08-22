@@ -7,12 +7,14 @@ class Parking < ApplicationRecord
   validate :validate_end_at_with_amount
   # 与user产生关联关系
   belongs_to :user, :optional => true
+  #
+  before_validation :setup_amount
 
 # 限制金额和结束时间的输出
   def validate_end_at_with_amount
-    if ( end_at.present? && amount.blank? )
-      errors.add(:amount, "有结束时间就必须有金额")
-    end
+    # if ( end_at.present? && amount.blank? )
+    #   errors.add(:amount, "有结束时间就必须有金额")
+    # end
     if ( end_at.blank? && amount.present? )
       errors.add(:end_at, "有金额必须有结束时间")
     end
@@ -22,7 +24,8 @@ class Parking < ApplicationRecord
     ( end_at - start_at ) / 60
   end
 
-  def calculate_amount
+  # def calculate_amount
+  def setup_amount
     # factor = (self.user.present?)? 50 : 100
 
     if self.amount.blank? && self.start_at.present? && self.end_at.present?
